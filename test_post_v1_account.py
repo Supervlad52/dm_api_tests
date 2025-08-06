@@ -1,8 +1,11 @@
+import pprint
+
 import requests
+from json import loads
 
 
 def test_post_v1_account():
-    login = 'pestov_test'
+    login = 'pestov_test_4'
     email = f'{login}@mail.ru'
     password = '123456789'
 
@@ -15,6 +18,7 @@ def test_post_v1_account():
     response = requests.post('http://5.63.153.31:5051/v1/account', json=json_data)
     print(response.status_code)
     print(response.text)
+    assert response.status_code == 201, f"Пользователь не был создан {response.json()}"
 
     # получить письма из почтового сервера
     params = {
@@ -24,17 +28,30 @@ def test_post_v1_account():
     response = requests.get('http://5.63.153.31:5025/api/v2/messages', params=params, verify=False)
     print(response.status_code)
     print(response.text)
+    assert response.status_code == 200, "Письма не были получены"
+
+    # pprint.pprint(response.json())
 
     # получить активационный токен
-    ...
+    token = None
+    for item in response.json()['items']:
+        user_data = loads(item['Content']['Body'])
+        user_login = user_data['Login']
+        if user_login == login:
+            print(user_login)
+            token = user_data['ConfirmationLinkUrl'].split('/')[-1]
+            print(token)
+
+    assert token is not None, f"Токен для пользователя {login} не был получен"
     # активация пользователя
     headers = {
         'accept': 'text/plain',
     }
 
-    response = requests.put('http://5.63.153.31:5051/v1/account/464c3d33-4d89-402a-aa8f-a72de6589cd1', headers=headers)
+    response = requests.put(f'http://5.63.153.31:5051/v1/account/{token}', headers=headers)
     print(response.status_code)
     print(response.text)
+    assert response.status_code == 200, "Пользователь не был активирован"
 
     # авторизация
     json_data = {
@@ -46,3 +63,4 @@ def test_post_v1_account():
     response = requests.post('http://5.63.153.31:5051/v1/account/login', json=json_data)
     print(response.status_code)
     print(response.text)
+    assert response.status_code == 200, "Пользователь не смог авторизоваться"
