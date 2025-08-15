@@ -26,7 +26,7 @@ def test_post_v1_account():
     account = DMApiAccount(configuration=dm_api_configuration)
     mailhog = MailHogApi(configuration=mailhog_configuration)
     account_helper = AccountHelper(mailhog=mailhog, dm_account_api=account)
-    login = 'pestov_test_20'
+    login = 'pestov_test_23'
     email = f'{login}@mail.ru'
     password = '123456789'
     account_helper.register_new_user(login=login, password=password, email=email)
