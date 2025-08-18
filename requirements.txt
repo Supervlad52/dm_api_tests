@@ -10,3 +10,5 @@ pytest==8.4.1
 requests==2.32.4
 structlog==25.4.0
 urllib3==2.5.0
+
+retrying~=1.4.2
