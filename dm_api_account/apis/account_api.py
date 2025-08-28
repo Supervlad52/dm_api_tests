@@ -1,3 +1,5 @@
+import allure
+
 from dm_api_account.models.registration import Registration
 from dm_api_account.models.user_envelope import UserEnvelope
 from restclient.client import RestClient
@@ -5,6 +7,7 @@ from restclient.client import RestClient
 
 class AccountApi(RestClient):
 
+    @allure.step('Зарегистрировать нового пользователя')
     def post_v1_account(
             self,
             registration: Registration
@@ -32,6 +35,7 @@ class AccountApi(RestClient):
         )
         return response
 
+    @allure.step('Активизировать пользователя')
     def put_v1_account_token(
             self,
             token,

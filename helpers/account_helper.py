@@ -1,6 +1,8 @@
 import time
 from json import loads
 
+import allure
+
 from dm_api_account.models.login_credentials import LoginCredentials
 from dm_api_account.models.registration import Registration
 from services.api_mailhog import MailHogApi
@@ -59,6 +61,7 @@ class AccountHelper:
         self.dm_account_api.account_api.set_headers(token)
         self.dm_account_api.login_api.set_headers(token)
 
+    @allure.step('Регистрация нового пользователя')
     def register_new_user(
             self,
             login: str,
@@ -81,6 +84,7 @@ class AccountHelper:
         # assert response.status_code == 200, "Пользователь не был активирован"
         return response
 
+    @allure.step('Аунтификация пользователя')
     def user_login(self, login: str, password: str, remember_me: bool = True, validate_response=False, validate_headers=False):
         login_credentials = LoginCredentials(
             login=login,
