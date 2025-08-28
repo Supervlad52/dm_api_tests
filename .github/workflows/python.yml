@@ -67,5 +67,6 @@ jobs:
       - name: Deploy to Github Pages
         id: deployment
         uses: actions/deploy-pages@v4
+      - run: echo 'https://supervlad52.github.io/dm_api_tests/'
 
 
