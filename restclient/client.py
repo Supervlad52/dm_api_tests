@@ -7,6 +7,11 @@ from requests import (
 import structlog
 import uuid
 import curlify
+from swagger_coverage_py.listener import CoverageListener
+
+
+from swagger_coverage_py.request_schema_handler import RequestSchemaHandler
+from swagger_coverage_py.uri import URI
 
 from restclient.configuration import Configuration
 from restclient.utilities import allure_attach
@@ -15,15 +20,18 @@ from restclient.utilities import allure_attach
 class RestClient:
     def __init__(
             self,
-            configuration = Configuration
-            ):
+            configuration=Configuration
+    ):
         self.host = configuration.host
         self.set_headers(configuration.headers)
         self.disable_log = configuration.disable_log
         self.session = session()
         self.log = structlog.get_logger(__name__).bind(service='api')
 
-    def set_headers(self, headers):
+    def set_headers(
+            self,
+            headers
+            ):
         if headers:
             self.session.headers.update(headers)
 
@@ -61,7 +69,7 @@ class RestClient:
             method,
             path,
             **kwargs
-            ):
+    ):
         log = self.log.bind(event_id=str(uuid.uuid4()))
         full_url = self.host + path
 
@@ -78,10 +86,15 @@ class RestClient:
             json=kwargs.get('json'),
             data=kwargs.get('data')
         )
-
         rest_response = self.session.request(method=method, url=full_url, **kwargs)
         rest_response.raise_for_status()
         curl = curlify.to_curl(rest_response.request)
+
+        uri = URI(host=self.host, base_path="", unformatted_path=path, uri_params=kwargs.get('params'))
+        RequestSchemaHandler(
+            uri, method.lower(), rest_response, kwargs
+        ).write_schema()
+
         print(curl)
         log.msg(
             event='Response',
@@ -95,7 +108,7 @@ class RestClient:
     @staticmethod
     def _get_json(
             rest_response
-            ):
+    ):
         try:
             return rest_response.json()
         except JSONDecodeError:
