@@ -38,6 +38,15 @@ jobs:
           pytest ./tests --alluredir=allure-results --disable-warnings
         continue-on-error: true
 
+      - name: Debug Swagger report existence
+        if: ${{ always() }}
+        run: |
+          echo "Looking in ./tests:"
+          ls -la ./tests | grep swagger
+          echo "Looking in root:"
+          ls -la | grep swagger
+        
+
       - name: Move Swagger coverage report to root
         if: ${{ always() }}
         run: |
