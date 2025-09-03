@@ -3,8 +3,8 @@ from json import loads
 
 import allure
 
-from dm_api_account.models.login_credentials import LoginCredentials
-from dm_api_account.models.registration import Registration
+from clients.http.dm_api_account.models.login_credentials import LoginCredentials
+from clients.http.dm_api_account.models.registration import Registration
 from services.api_mailhog import MailHogApi
 from services.dm_api_account import DMApiAccount
 from retrying import retry

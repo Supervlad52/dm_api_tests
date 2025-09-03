@@ -5,3 +5,7 @@ service:
 user:
   login: "pestov_test"
   password: "123456789"
+
+telegram:
+  chat_id: '1267208060'
+  token: '8316617298:AAFCt0MStjGov6QQHBP0RLL_Ir7iqtrW2sA'

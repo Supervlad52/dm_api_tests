@@ -1,10 +1,4 @@
-from datetime import datetime
-
 from checkers.http_checkers import check_status_code_http
-from assertpy import soft_assertions
-from hamcrest import assert_that
-
-from dm_api_account.models.user_envelope import UserRole
 
 
 def test_get_v1_account_auth(auth_account_helper):

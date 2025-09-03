@@ -1,8 +1,8 @@
 import allure
 
-from dm_api_account.models.registration import Registration
-from dm_api_account.models.user_envelope import UserEnvelope
-from restclient.client import RestClient
+from clients.http.dm_api_account.models.registration import Registration
+from clients.http.dm_api_account.models.user_envelope import UserEnvelope
+from packages.restclient.client import RestClient
 
 
 class AccountApi(RestClient):
