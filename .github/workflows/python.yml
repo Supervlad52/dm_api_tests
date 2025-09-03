@@ -38,17 +38,17 @@ jobs:
           pytest ./tests --alluredir=allure-results --disable-warnings
         continue-on-error: true
 
+      - name: Move Swagger coverage report to root
+        if: ${{ always() }}
+        run: |
+          if [ -f ./tests/swagger-coverage-dm-api-account.html ]; then
+             mv ./tests/swagger-coverage-dm-api-account.html ./swagger-coverage-dm-api-account.html
+          fi
+
       - name: Run Coverage
         if: ${{ always() }}
         run: |
           python -m packages.notifier.bot
-
-      - name: Move Swagger coverage report to root
-        if: ${{ always() }}
-        run: |
-         if [ -f ./tests/swagger-coverage-dm-api-account.html ]; then
-            mv ./tests/swagger-coverage-dm-api-account.html ./swagger-coverage-dm-api-account.html
-         fi
 
       - name: Arhive allure results
         uses: actions/upload-artifact@v4

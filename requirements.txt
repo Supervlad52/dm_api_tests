@@ -34,5 +34,5 @@ urllib3==2.5.0
 vyper-config==1.2.1
 watchdog==6.0.0
 swagger-coverage @ https://github.com/Supervlad52/swagger-coverage-py/archive/refs/heads/master.zip
-
+six
 telebot~=0.0.5
