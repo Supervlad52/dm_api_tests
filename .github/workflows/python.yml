@@ -35,9 +35,19 @@ jobs:
       - name: Run tests
         run: |
           export JAVA_HOME=$JAVA_HOME
-          pytest ./tests --alluredir=allure-results --disable-warnings
+          pytest ./tests --alluredir=allure-results --disable-warnings -v -s
         continue-on-error: true
-
+      - name: List all files after tests
+        if: ${{ always() }}
+        run: |
+          echo "=== ./tests contents ==="
+          find ./tests -type f -name "*.html" || true
+          echo "=== root contents ==="
+          find . -maxdepth 1 -type f -name "*.html" || true
+#          export JAVA_HOME=$JAVA_HOME
+#          pytest ./tests --alluredir=allure-results --disable-warnings
+#        continue-on-error: true
+#        потом удалить
       - name: Debug Swagger report existence
         if: ${{ always() }}
         run: |
@@ -53,7 +63,7 @@ jobs:
           if [ -f ./tests/swagger-coverage-dm-api-account.html ]; then
              mv ./tests/swagger-coverage-dm-api-account.html ./swagger-coverage-dm-api-account.html
           fi
-
+#       до сюда
       - name: Run Coverage
         if: ${{ always() }}
         run: |
